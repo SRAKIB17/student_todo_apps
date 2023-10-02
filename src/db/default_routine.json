@@ -1,0 +1,37 @@
+[
+    {
+        "id": 1,
+        "day": "Sunday",
+        "activities": {}
+    },
+    {
+        "id": 2,
+        "day": "Monday",
+        "activities": {}
+    },
+    {
+        "id": 3,
+        "day": "Tuesday",
+        "activities": {}
+    },
+    {
+        "id": 4,
+        "day": "Wednesday",
+        "activities": {}
+    },
+    {
+        "id": 5,
+        "day": "Thursday",
+        "activities": {}
+    },
+    {
+        "id": 6,
+        "day": "Friday",
+        "activities": {}
+    },
+    {
+        "id": 7,
+        "day": "Saturday",
+        "activities": {}
+    }
+]
