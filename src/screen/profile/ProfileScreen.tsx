@@ -28,6 +28,7 @@ const user_info = {
 export default function ProfileScreen({ navigation, drawerRef, translate }: navigationInterface) {
     const { my_account_menu } = translate_each_word()
     const { log_out } = translate
+
     return (
         <View style={global_styles.container}>
 

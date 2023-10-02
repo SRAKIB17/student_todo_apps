@@ -1,12 +1,11 @@
 import React, { useContext, useState } from 'react';
 import { NavigationProvider } from './NavigationContainer';
 import Router from './router';
-import { Image, SafeAreaView, ScrollView, View } from 'react-native';
+import { Image, SafeAreaView, ScrollView, Text, View } from 'react-native';
 import Footer from '../components/shared/Footer';
 import colors from '../utils/colors';
 import MainNavbar from '../components/shared/Navbar/MainNavbar';
-import HomeScreen from '../screen/home/HomeScreen';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 const Navigator = () => {
     const { navigation, translate, drawerRef, routine } = useContext(NavigationProvider)
@@ -25,6 +24,7 @@ const Navigator = () => {
     }
     // AsyncStorage.removeItem('link').then(r => {
     //     console.log(r)
+
     // })
 
     return (

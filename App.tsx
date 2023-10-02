@@ -1,5 +1,5 @@
 import React, { createContext, useRef } from 'react';
-import { StatusBar, StyleSheet } from 'react-native';
+import { Platform, StatusBar, StyleSheet } from 'react-native';
 
 import DrawerMenuNavbar from './src/components/shared/Navbar/DrawerMenuNavbar';
 import NavigationContainer from './src/navigators/NavigationContainer';
@@ -7,13 +7,16 @@ import Navigator from './src/navigators/Navigator';
 import AuthenticationCheckProvider from './src/context/Authentication/AuthenticationCheckProvider';
 import colors from './src/utils/colors';
 
+
+
 const ShopProvider = createContext({})
+
 function App(): JSX.Element {
 
   return (
     <AuthenticationCheckProvider>
       <NavigationContainer>
-        <DrawerMenuNavbar >
+        <DrawerMenuNavbar>
           <ShopProvider.Provider value={{}}>
             <StatusBar
               animated={true}

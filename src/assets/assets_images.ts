@@ -31,4 +31,7 @@ export const assets_images = {
     "notes_color": require('./images/routine/notes.png'),
     "routine_color": require('./images/routine/routine.png'),
     "calendar_color": require('./images/routine/calendar.png'),
+    "clock_3d": require('./images/routine/clock_3d.png'),
+    "delete_3d": require('./images/routine/delete_3d.png'),
+    "edit_3d": require('./images/routine/edit_3d.png'),
 }

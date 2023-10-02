@@ -4,29 +4,61 @@ import { translate, translateInterface } from '../translate/translate';
 import { DrawerLayoutAndroid } from 'react-native';
 import default_routine from '../db/default_routine.json'
 
+import * as SQLite from 'expo-sqlite';
+export const db = SQLite.openDatabase('student_tools');
+
+const routine_time_slots = `
+CREATE TABLE IF NOT EXISTS routine_time_slots (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    fromTime VARCHAR(255) NOT NULL,
+    toTime VARCHAR(255) NOT NULL NOT NULL,
+    dayID INTEGER NOT NULL,
+    details TEXT,
+    title TEXT
+);
+`
+const x = `INSERT INTO routine_time_slots (from_time, to_time, details, title,dayID) VALUES('12:00 am', '1:00 am', 'Midnight', 'Sleep',2)`
+db.exec([
+    { sql: routine_time_slots, args: [] }
+], false, (err, result) => {
+    console.log(result);
+});
+
 export interface navigationInterface {
     navigation: {
-        navigate: (value: string) => void,
-        params: {},
+        navigate: (value: string, paramsProps?: { key: string; value?: string | number | undefined; }[]) => void,
+        params: {} | any,
         pathname: string,
-        setParams: (props: { key: string; value?: string | number | undefined; }) => void,
+        // setParams: (props: { key: string; value?: string | number | undefined; }) => void,
     },
     translate: translateInterface,
     drawerRef: React.RefObject<DrawerLayoutAndroid>,
-    routine: {}[]
+    routine: {
+        id: number,
+        day: string,
+        time_slots: {
+            from: string,
+            to: string,
+            details: string,
+            title: string
+        }[]
+    }[]
 }
 
 export const NavigationProvider = createContext<navigationInterface>({
     navigation: {
         params: {},
-        navigate(value) { },
+        navigate(value, hasParams) { },
         pathname: '',
-        setParams: () => { },
+        // setParams: () => { },
     },
     translate: translate?.en,
     drawerRef: { current: null },
     routine: default_routine
 })
+
+const dataArray = [{ "routineID": 1 }, { "day": "Sunday" }];
+
 
 
 export default function NavigationContainer({ children }: { children: React.ReactNode }): JSX.Element {
@@ -37,16 +69,34 @@ export default function NavigationContainer({ children }: { children: React.Reac
     const drawerRef = useRef<DrawerLayoutAndroid>(null);
 
     class navigation {
-        navigate = async (value: string) => {
-            setScreen(value)
-            await AsyncStorage.setItem('link', value)
+        navigate = async (value: string, paramsProps = [{ key: '', value: '' }]) => {
+
+            if (Boolean(paramsProps?.[0]?.key) && Boolean(paramsProps?.[0]?.value)) {
+                const xx: Array<{ [key: string]: any }> = paramsProps?.map(r => {
+                    return {
+                        [r?.key]: r?.value
+                    }
+                })
+                const mergedObject = Object.assign({}, ...xx);
+
+
+                const p = {
+                    ...params,
+                    ...mergedObject
+                }
+                console.log(p)
+                setScreen(value)
+                setAllParams(p)
+                await AsyncStorage.setItem('link', value)
+                await AsyncStorage.setItem('params', JSON.stringify(p))
+            }
+            else {
+                setScreen(value)
+                await AsyncStorage.setItem('link', value)
+                await AsyncStorage.removeItem('params')
+            }
         }
-        setParams(props: { key: string, value?: string | number | undefined }) {
-            setAllParams({
-                ...params,
-                [props.key]: props?.value
-            })
-        }
+
         get params() {
             return params
         }
@@ -56,39 +106,50 @@ export default function NavigationContainer({ children }: { children: React.Reac
     }
 
 
-    AsyncStorage.getItem('link').then(r => {
-        if (r) {
-            setScreen(r)
-        }
-        else {
-            setScreen('/home')
-        }
-    })
 
-    const [language, setLanguage] = useState<translateInterface>(translate?.en)
+
+    const [language, setLanguage] = useState<translateInterface>(translate?.bn)
 
     useEffect(() => {
-        setLanguage(translate?.en)
+        setLanguage(translate?.bn)
         setRoutine(default_routine)
+        AsyncStorage.getItem('link').then(r => {
+            if (r) {
+                setScreen(r)
+            }
+            else {
+                setScreen('/home')
+            }
+        })
+        AsyncStorage.getItem('params').then(r => {
+            if (r) {
+                setAllParams(JSON.parse(r))
+            }
+            else {
+                setAllParams({})
+            }
+        })
+
         return () => { }
     }, [])
 
-    useEffect(() => {
-        AsyncStorage.getItem('language').then(r => {
-            if (r == 'bn') {
-                setLanguage(translate?.bn)
-            }
-            else {
-                setLanguage(translate?.en)
-            }
-        })
-    }, [screen])
+    // useEffect(() => {
+    //     AsyncStorage.getItem('language').then(r => {
+    //         if (r == 'bn') {
+    //             setLanguage(translate?.bn)
+    //         }
+    //         else {
+    //             setLanguage(translate?.en)
+    //         }
+    //     })
+    // }, [screen])
+    const navigationConstructor: any = new navigation()
 
     return (
         <NavigationProvider.Provider
             value={{
                 routine: routine,
-                navigation: new navigation(),
+                navigation: navigationConstructor,
                 translate: language,
                 drawerRef: drawerRef
             }}

@@ -12,12 +12,10 @@ import NotificationsScreen from "../screen/notifications/NotificationsScreen";
 import AccountInformation from "../screen/account_information/AccountInformation";
 import ShippingAddressScreen from "../screen/shipping_address/ShippingAddressScreen";
 import RoutineScreen from "../screen/routine/RoutineScreen";
+import RoutineDetailsScreen from "../screen/routine_details/RoutineDetailsScreen";
 
 export default function Router(props: navigationInterface) {
     const { translate, navigation: { pathname, params } } = props
-
-    console.log(params)
-
     const {
         my_carts,
         my_profile,
@@ -32,8 +30,7 @@ export default function Router(props: navigationInterface) {
         notes,
         routine
     } = translate
-
-
+    const week_day: any = translate
     const router = [
         // /home
         {
@@ -68,6 +65,19 @@ export default function Router(props: navigationInterface) {
             />,
             component: RoutineScreen,
             link: "/routine",
+        },
+
+        {
+            light: assets_images.home_light,
+            dark: assets_images.home_dark,
+            title: "Routine",
+            navbar: <NavbarTitleBackButton
+                title={week_day[params?.day?.toLowerCase()]}
+                key="routine_nav"
+                backward="/routine"
+            />,
+            component: RoutineDetailsScreen,
+            link: `/routine/${params?.routineID}`,
         },
 
 
@@ -186,6 +196,5 @@ export default function Router(props: navigationInterface) {
 
 
     ];
-
     return router.find(component => component.link == pathname)
 }

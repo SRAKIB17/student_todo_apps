@@ -3,25 +3,25 @@ import { Animated, FlatList, Image, Pressable, SafeAreaView, StyleSheet, Text, V
 import { assets_images } from '../../assets/assets_images';
 import { global_styles } from '../../styles/global';
 import translate_each_word from '../../db/translate_each_word';
-import { NavigationProvider } from '../../navigators/NavigationContainer';
+import { NavigationProvider, db, navigationInterface } from '../../navigators/NavigationContainer';
 import colors from '../../utils/colors';
 
+export default function RoutineScreen(props: navigationInterface) {
+    const { routine, navigation, translate }: any = props
 
-export default function RoutineScreen() {
-    const { routine, navigation } = useContext(NavigationProvider)
+
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={global_styles.container}>
                 {
-                    routine?.map((r: any, index) => {
-                        // const check = pathname === r.link;
+                    routine?.map((r: any, index: number) => {
                         return (
                             <View key={index}>
-                                <Pressable onPress={() => {
-                                    navigation.navigate(`/routine/${r?.id}`)
-                                    navigation.setParams({ key: "routineID", value: r?.id })
-                                }}   >
+                                <Pressable onPress={() => navigation.navigate(`/routine/${r?.id}`, [
+                                    { key: 'routineID', value: r?.id },
+                                    { key: 'day', value: r?.day },
+                                ])}   >
                                     <View style={styles.button}>
                                         <View style={styles.button_title_image}>
                                             <View>
@@ -35,7 +35,7 @@ export default function RoutineScreen() {
                                             <View>
                                                 <Text style={[global_styles.text_lg, { textTransform: "capitalize" }]}>
                                                     {
-                                                        r?.day
+                                                        translate[r?.day?.toLowerCase()]
                                                     }
                                                 </Text>
                                             </View>

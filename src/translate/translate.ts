@@ -38,6 +38,15 @@ export interface translateInterface {
 
     "notes": string,
     "routine": string,
+    "monday": string,
+    "tuesday": string,
+    "wednesday": string,
+    "thursday": string,
+    "friday": string,
+    "saturday": string,
+    "sunday": string,
+    "not_found": string
+
 }
 
 export const translate = {
@@ -79,9 +88,16 @@ export const translate = {
         "default_address": "ডিফল্ট",
 
 
-        "notes": "Notes",
+        "notes": "নোটস",
         "routine": "রুটিন",
-
+        "monday": "সোমবার",
+        "tuesday": "মঙ্গলবার",
+        "wednesday": "বুধবার",
+        "thursday": "বৃহস্পতিবার",
+        "friday": "শুক্রবার",
+        "saturday": "শনিবার",
+        "sunday": "রবিবার",
+        "not_found": "খুজে পাওয়া যায় নি"
     },
 
     "en": {
@@ -126,5 +142,13 @@ export const translate = {
 
         "notes": "Notes",
         "routine": "Routine",
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday",
+        "sunday": "Sunday",
+        "not_found": "Not Found"
     }
 }
