@@ -77,10 +77,8 @@ function UpdateTimeSlot({ navigation, setUpdateEntry, getAllTimeSlots, updateEnt
                     defaultValue={updateEntry?.details}
                     onChangeText={(text) => setDetails(text)}
                     placeholder="Write a details of time slots"
-                    style={[styles.input, { height: 100, textAlign: 'auto' }]}
+                    style={[{ height: 100, borderColor: colors.primary, borderWidth: 1, paddingHorizontal: 4, }]}
                     multiline
-                    numberOfLines={4}
-                    maxLength={40}
                 />
             </View>
             <View style={{ display: 'flex', flexDirection: "row", gap: 4, }}>

@@ -34,4 +34,8 @@ export const assets_images = {
     "clock_3d": require('./images/routine/clock_3d.png'),
     "delete_3d": require('./images/routine/delete_3d.png'),
     "edit_3d": require('./images/routine/edit_3d.png'),
+    "income_expenditure_3d": require('./images/routine/income_expenditure_3d.png'),
+    "income_3d": require('./images/routine/income_3d.png'),
+    "expenditure_3d": require('./images/routine/expenditure_3d.png'),
+    "blank_date_3d": require('./images/routine/blank_date_3d.png'),
 }

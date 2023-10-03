@@ -74,10 +74,10 @@ function AddNewTimeSlot({ navigation, setNewEntry, getAllTimeSlots }: { setNewEn
                 <TextInput
                     onChangeText={(text) => setDetails(text)}
                     placeholder="Write a details of time slots"
-                    style={[styles.input, { height: 100, textAlign: 'auto' }]}
+                    style={[{ height: 100, borderColor: colors.primary, borderWidth: 1, paddingHorizontal: 4, }]}
                     multiline
-                    numberOfLines={4}
-                    maxLength={40}
+                // numberOfLines={4}
+                // maxLength={40}
                 />
             </View>
             <View style={{ display: 'flex', flexDirection: "row", gap: 4, }}>
@@ -87,9 +87,8 @@ function AddNewTimeSlot({ navigation, setNewEntry, getAllTimeSlots }: { setNewEn
                     </Text>
                     <TextInput
                         onChangeText={(text) => setToTime(text)}
-                        placeholder="From time slot"
+                        placeholder="11:00 am"
                         style={styles.input}
-                        defaultValue='11:00 am'
                     />
                 </View>
                 <View>
@@ -98,9 +97,9 @@ function AddNewTimeSlot({ navigation, setNewEntry, getAllTimeSlots }: { setNewEn
                     </Text>
                     <TextInput
                         onChangeText={(text) => setFromTime(text)}
-                        placeholder="To time slot"
+                        placeholder="11:30 am"
                         style={styles.input}
-                        defaultValue='11:30 am'
+
                     />
                 </View>
             </View>

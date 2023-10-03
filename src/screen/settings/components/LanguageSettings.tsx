@@ -4,6 +4,7 @@ import { NavigationProvider } from '../../../navigators/NavigationContainer';
 import translate_each_word from '../../../db/translate_each_word';
 import { assets_images } from '../../../assets/assets_images';
 import { global_styles } from '../../../styles/global';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -12,26 +13,26 @@ function LanguageSettings({ button, button_title_image }: { button: object, butt
     const { change_language } = translate
     const [isEnabled, setIsEnabled] = useState(false);
     useEffect(() => {
-        // AsyncStorage.getItem('language')
-        //     .then(r => {
-        //         if (r == 'bn') {
-        //             setIsEnabled(true)
-        //         }
-        //         else {
-        //             setIsEnabled(false)
-        //         }
-        //     })
+        AsyncStorage.getItem('language')
+            .then(r => {
+                if (r == 'bn') {
+                    setIsEnabled(true)
+                }
+                else {
+                    setIsEnabled(false)
+                }
+            })
     }, [])
 
     const toggleSwitch = async () => {
-        // const language = await AsyncStorage.getItem('language');
+        const language = await AsyncStorage.getItem('language');
 
-        // if (language == 'en') {
-        //     await AsyncStorage.setItem('language', 'bn')
-        // }
-        // else {
-        //     await AsyncStorage.setItem('language', 'en')
-        // }
+        if (language == 'en') {
+            await AsyncStorage.setItem('language', 'bn')
+        }
+        else {
+            await AsyncStorage.setItem('language', 'en')
+        }
         await navigate('/home')
         setIsEnabled(previousState => !previousState)
     };

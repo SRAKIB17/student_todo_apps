@@ -49,9 +49,6 @@ export default function SettingsScreen() {
                 <View>
                     <LanguageSettings button={styles.button} button_title_image={styles.button_title_image} />
                 </View>
-                <View>
-                    <LanguageSettings button={styles.button} button_title_image={styles.button_title_image} />
-                </View>
 
                 {/* <View>
                     <TouchableOpacity

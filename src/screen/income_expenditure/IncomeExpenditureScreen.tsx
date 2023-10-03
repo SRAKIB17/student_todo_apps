@@ -1,30 +1,41 @@
 import React, { useContext, useRef, useEffect } from 'react';
 import { Animated, FlatList, Image, Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { NavigationProvider, navigationInterface } from '../../navigators/NavigationContainer';
+import colors from '../../utils/colors';
 import { assets_images } from '../../assets/assets_images';
 import { global_styles } from '../../styles/global';
 import translate_each_word from '../../db/translate_each_word';
-import { NavigationProvider, db, navigationInterface } from '../../navigators/NavigationContainer';
-import colors from '../../utils/colors';
 
-export default function RoutineScreen(props: navigationInterface) {
-    const { routine, navigation, translate }: any = props
 
+export default function IncomeExpenditureScreen(props: navigationInterface) {
+    const { routine, navigation, translate } = props
+    const { current_income_expenditure, income_expenditure_history } = translate
+    const menu = [
+        {
+            title: current_income_expenditure,
+            link: '/income-expenditure/current',
+            color: assets_images.income_expenditure_3d,
+        },
+        {
+            title: income_expenditure_history,
+            link: '/income-expenditure/history',
+            color: assets_images.income_expenditure_3d,
+        },
+    ]
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={global_styles.container}>
                 {
-                    routine?.map((r: any, index: number) => {
+                    menu?.map((r: any, index) => {
+                        // const check = pathname === r.link;
                         return (
                             <View key={index}>
-                                <Pressable onPress={() => navigation.navigate(`/routine/${r?.id}`, [
-                                    { key: 'routineID', value: r?.id },
-                                    { key: 'day', value: r?.day },
-                                ])}   >
+                                <Pressable onPress={() => navigation.navigate(r?.link)}   >
                                     <View style={styles.button}>
                                         <View style={styles.button_title_image}>
                                             <View>
                                                 <Image
-                                                    source={assets_images.calendar_color}
+                                                    source={r?.color}
                                                     style={{
                                                         height: 20, width: 20, objectFit: 'contain',
                                                     }}
@@ -33,7 +44,7 @@ export default function RoutineScreen(props: navigationInterface) {
                                             <View>
                                                 <Text style={[global_styles.text_lg, { textTransform: "capitalize" }]}>
                                                     {
-                                                        translate[r?.day?.toLowerCase()]
+                                                        r?.title
                                                     }
                                                 </Text>
                                             </View>

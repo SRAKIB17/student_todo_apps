@@ -7,6 +7,7 @@ import TouchableOpacityButton from '../../button/PressableButton';
 import { global_styles } from '../../../styles/global';
 import colors from '../../../utils/colors';
 import { NavigationProvider } from '../../../navigators/NavigationContainer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // import Router from '../../../navigators/router';
 
 
@@ -41,7 +42,11 @@ const NavbarTitleBackButton = ({
                     <View style={{ position: 'absolute' }}>
                         <TouchableOpacityButton
                             key={title}
-                            onPress={() => { navigation.navigate(backward) }}
+
+                            onPress={async () => {
+                                // await AsyncStorage.removeItem('params')
+                                navigation.navigate(backward)
+                            }}
                             image={assets_images.arrow_right_light}
                             imageStyle={{ transform: [{ rotate: "180deg" }] }}
                             containerStyles={{

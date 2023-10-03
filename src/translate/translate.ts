@@ -45,8 +45,27 @@ export interface translateInterface {
     "friday": string,
     "saturday": string,
     "sunday": string,
-    "not_found": string
+    "not_found": string,
+    "income_expenditure": string,
+    "expenditure": string,
+    "income": string,
+    "savings": string,
+    "current_income_expenditure": string,
+    "income_expenditure_history": string,
 
+
+    "january": string,
+    "february": string,
+    "march": string,
+    "april": string,
+    "may": string,
+    "june": string,
+    "july": string,
+    "august": string,
+    "september": string,
+    "october": string,
+    "november": string,
+    "december": string,
 }
 
 export const translate = {
@@ -97,7 +116,26 @@ export const translate = {
         "friday": "শুক্রবার",
         "saturday": "শনিবার",
         "sunday": "রবিবার",
-        "not_found": "খুজে পাওয়া যায় নি"
+        "not_found": "খুজে পাওয়া যায় নি",
+        "income_expenditure": "আয় ব্যয়",
+        "income": "আয়",
+        "expenditure": "ব্যয়",
+        "savings": "সঞ্চয়",
+        "current_income_expenditure": "বর্তমান আয় ব্যয়",
+        "income_expenditure_history": "আয় ব্যয়ের ইতিহাস",
+
+        "january": "জানুয়ারী",
+        "february": "ফেব্রুয়ারী",
+        "march": "মার্চ",
+        "april": "এপ্রিল",
+        "may": "মে",
+        "june": "জুন",
+        "july": "জুলাই",
+        "august": "আগস্ট",
+        "september": "সেপ্টেম্বর",
+        "october": "অক্টোবর",
+        "november": "নভেম্বর",
+        "december": "ডিসেম্বর",
     },
 
     "en": {
@@ -149,6 +187,25 @@ export const translate = {
         "friday": "Friday",
         "saturday": "Saturday",
         "sunday": "Sunday",
-        "not_found": "Not Found"
+        "not_found": "Not Found",
+        "income_expenditure": "Income Expenditure",
+        "income": "Income",
+        "expenditure": "Expenditure",
+        "savings": "Savings",
+        "current_income_expenditure": "Cur Income Expenditure",
+        "income_expenditure_history": "Income Expenditure History",
+
+        "january": "January",
+        "february": "February",
+        "march": "March",
+        "april": "April",
+        "may": "May",
+        "june": "June",
+        "july": "July",
+        "august": "August",
+        "september": "September",
+        "october": "October",
+        "november": "November",
+        "december": "December",
     }
 }

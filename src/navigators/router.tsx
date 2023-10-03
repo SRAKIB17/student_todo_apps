@@ -13,9 +13,18 @@ import AccountInformation from "../screen/account_information/AccountInformation
 import ShippingAddressScreen from "../screen/shipping_address/ShippingAddressScreen";
 import RoutineScreen from "../screen/routine/RoutineScreen";
 import RoutineDetailsScreen from "../screen/routine_details/RoutineDetailsScreen";
+import IncomeExpenditureScreen from "../screen/income_expenditure/IncomeExpenditureScreen";
+import CurrentIncomeExpenditureScreen from "../screen/income_expenditure/CurrentIncomeExpenditureScreen";
+import HistoryIncomeExpenditureScreen from "../screen/income_expenditure/HistoryIncomeExpenditureScreen";
+
+import transactionsDefaultDB from '../db/transactions.json'
 
 export default function Router(props: navigationInterface) {
-    const { translate, navigation: { pathname, params } } = props
+    const { translate, navigation: { pathname, params }, database } = props
+    const months: any = translate;
+
+    console.log(params)
+
     const {
         my_carts,
         my_profile,
@@ -28,22 +37,21 @@ export default function Router(props: navigationInterface) {
 
 
         notes,
-        routine
+        routine,
+        income_expenditure,
+        current_income_expenditure,
+        income_expenditure_history
     } = translate
     const week_day: any = translate
     const router = [
         // /home
         {
-            light: assets_images.home_light,
-            dark: assets_images.home_dark,
             title: "Home",
             component: HomeScreen,
             link: "/home",
         },
 
         {
-            light: assets_images.home_light,
-            dark: assets_images.home_dark,
             title: "Notes",
             navbar: <NavbarTitleBackButton
                 title={notes}
@@ -55,8 +63,6 @@ export default function Router(props: navigationInterface) {
         },
 
         {
-            light: assets_images.home_light,
-            dark: assets_images.home_dark,
             title: "Routine",
             navbar: <NavbarTitleBackButton
                 title={routine}
@@ -68,8 +74,6 @@ export default function Router(props: navigationInterface) {
         },
 
         {
-            light: assets_images.home_light,
-            dark: assets_images.home_dark,
             title: "Routine",
             navbar: <NavbarTitleBackButton
                 title={week_day[params?.day?.toLowerCase()]}
@@ -84,8 +88,6 @@ export default function Router(props: navigationInterface) {
 
         // /profile
         {
-            light: assets_images.profile_light,
-            dark: assets_images.profile_dark,
             title: "Profile",
             link: "/profile",
             navbar: <NavbarTitleBackButton
@@ -97,8 +99,6 @@ export default function Router(props: navigationInterface) {
         },
         // /account-information
         {
-            light: assets_images.profile_light,
-            dark: assets_images.profile_dark,
             title: "Account information",
             link: "/account-information",
             navbar: <NavbarTitleBackButton
@@ -111,8 +111,6 @@ export default function Router(props: navigationInterface) {
 
         // /wishlists
         {
-            light: assets_images.wishlist_light,
-            dark: assets_images.wishlist_dark,
             title: "Favorite",
             link: "/wishlists",
             navbar: <NavbarTitleBackButton
@@ -125,8 +123,6 @@ export default function Router(props: navigationInterface) {
 
         // /wishlists
         {
-            light: assets_images.shipping_address_light,
-            dark: assets_images.shipping_address_dark,
             title: "Shipping Address",
             link: "/shipping-address",
             navbar: <NavbarTitleBackButton
@@ -139,8 +135,6 @@ export default function Router(props: navigationInterface) {
 
         // /carts
         {
-            light: assets_images.cart_light,
-            dark: assets_images.cart_dark,
             title: "Cart",
             link: "/carts",
             navbar: <NavbarTitleBackButton
@@ -151,23 +145,49 @@ export default function Router(props: navigationInterface) {
             component: CartScreen
         },
 
-        // /orders
         {
-            light: assets_images.order_light,
-            dark: assets_images.order_dark,
-            title: "Orders",
-            link: "/orders",
+            title: "Income Expenditure",
+            link: "/income-expenditure",
             navbar: <NavbarTitleBackButton
-                title={my_orders}
-                key="my_orders_nav"
-                backward="/profile"
+                title={income_expenditure}
+                key="income_expenditure_nav"
+                backward="/home"
             />,
-            component: OrderScreen
+            component: IncomeExpenditureScreen
+        },
+        {
+            title: "Income Expenditure Current",
+            link: "/income-expenditure/current",
+            navbar: <NavbarTitleBackButton
+                title={`${current_income_expenditure} (${months[Object.values(transactionsDefaultDB?.months[`${new Date().getMonth()}`])?.[0]?.toLowerCase()]})`}
+                key="income_expenditure_current_nav"
+                backward="/income-expenditure"
+            />,
+            component: CurrentIncomeExpenditureScreen
+        },
+        {
+            title: "Income Expenditure History",
+            link: "/income-expenditure/history",
+            navbar: <NavbarTitleBackButton
+                title={income_expenditure_history}
+                // title={`${income_expenditure_history}${params?.expensiveYear ? "(" + params?.expensiveYear + ")" : ""}`}
+                key="income_expenditure_history_nav"
+                backward="/income-expenditure"
+            />,
+            component: HistoryIncomeExpenditureScreen
+        },
+        {
+            title: "Income Expenditure History",
+            link: "/income-expenditure/history",
+            navbar: <NavbarTitleBackButton
+                title={income_expenditure_history}
+                key="income_expenditure_history_nav"
+                backward="/income-expenditure"
+            />,
+            component: HistoryIncomeExpenditureScreen
         },
         // /notifications
         {
-            light: assets_images.profile_light,
-            dark: assets_images.profile_dark,
             title: "Notifications",
             link: "/notifications",
             navbar: <NavbarTitleBackButton
@@ -180,8 +200,6 @@ export default function Router(props: navigationInterface) {
 
         // /settings
         {
-            light: assets_images.profile_light,
-            dark: assets_images.profile_dark,
             title: "Settings",
             link: "/settings",
             navbar: <NavbarTitleBackButton

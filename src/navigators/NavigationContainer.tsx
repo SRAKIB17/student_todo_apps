@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { translate, translateInterface } from '../translate/translate';
 import { DrawerLayoutAndroid } from 'react-native';
 import default_routine from '../db/default_routine.json'
+import database from '../db/database.json'
 
 import * as SQLite from 'expo-sqlite';
 export const db = SQLite.openDatabase('student_tools');
@@ -17,19 +18,43 @@ CREATE TABLE IF NOT EXISTS routine_time_slots (
     title TEXT
 );
 `
+const income_expenditure = `
+CREATE TABLE IF NOT EXISTS income_expenditure (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    type VARCHAR(255) NOT NULL,
+    amount INT NOT NULL,
+    createdAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    details TEXT,
+    monthID REAL NOT NULL,
+    title TEXT
+);
+`
 const x = `INSERT INTO routine_time_slots (from_time, to_time, details, title,dayID) VALUES('12:00 am', '1:00 am', 'Midnight', 'Sleep',2)`
+
 db.exec([
-    { sql: routine_time_slots, args: [] }
+    { sql: routine_time_slots, args: [] },
+    { sql: income_expenditure, args: [] },
 ], false, (err, result) => {
-    console.log(result);
+    console.log(result)
+    // console.log(result);
 });
+
+export interface databaseType {
+    transactions?: {
+        "type": 'expense' | 'income',
+        "datetime": string,
+        "title": string,
+        "amount": number,
+        "details": string,
+    }[]
+}
 
 export interface navigationInterface {
     navigation: {
         navigate: (value: string, paramsProps?: { key: string; value?: string | number | undefined; }[]) => void,
         params: {} | any,
         pathname: string,
-        // setParams: (props: { key: string; value?: string | number | undefined; }) => void,
+        setParams: (props: { key: string; value?: string | number | undefined; }[]) => void,
     },
     translate: translateInterface,
     drawerRef: React.RefObject<DrawerLayoutAndroid>,
@@ -42,7 +67,8 @@ export interface navigationInterface {
             details: string,
             title: string
         }[]
-    }[]
+    }[],
+    database: databaseType
 }
 
 export const NavigationProvider = createContext<navigationInterface>({
@@ -50,11 +76,12 @@ export const NavigationProvider = createContext<navigationInterface>({
         params: {},
         navigate(value, hasParams) { },
         pathname: '',
-        // setParams: () => { },
+        setParams: () => { },
     },
     translate: translate?.en,
     drawerRef: { current: null },
-    routine: default_routine
+    routine: default_routine,
+    database: database
 })
 
 const dataArray = [{ "routineID": 1 }, { "day": "Sunday" }];
@@ -72,19 +99,20 @@ export default function NavigationContainer({ children }: { children: React.Reac
         navigate = async (value: string, paramsProps = [{ key: '', value: '' }]) => {
 
             if (Boolean(paramsProps?.[0]?.key) && Boolean(paramsProps?.[0]?.value)) {
-                const xx: Array<{ [key: string]: any }> = paramsProps?.map(r => {
+
+                const paramsObj: Array<{ [key: string]: any }> = paramsProps?.map(r => {
                     return {
                         [r?.key]: r?.value
                     }
                 })
-                const mergedObject = Object.assign({}, ...xx);
+
+                const mergedObject = Object.assign({}, ...paramsObj);
 
 
                 const p = {
                     ...params,
                     ...mergedObject
                 }
-                console.log(p)
                 setScreen(value)
                 setAllParams(p)
                 await AsyncStorage.setItem('link', value)
@@ -97,6 +125,23 @@ export default function NavigationContainer({ children }: { children: React.Reac
             }
         }
 
+        setParams = async (paramsProps = [{ key: '', value: '' }]) => {
+            const paramsObj: Array<{ [key: string]: any }> = paramsProps?.map(r => {
+                return {
+                    [r?.key]: r?.value
+                }
+            })
+            const mergedObject = Object.assign({}, ...paramsObj);
+
+            const p = {
+                ...params,
+                ...mergedObject
+            }
+
+            setAllParams(p)
+            await AsyncStorage.setItem('params', JSON.stringify(p))
+        }
+
         get params() {
             return params
         }
@@ -106,9 +151,10 @@ export default function NavigationContainer({ children }: { children: React.Reac
     }
 
 
-
-
     const [language, setLanguage] = useState<translateInterface>(translate?.bn)
+
+
+    const [getDatabase, setDatabase] = useState<databaseType>(database)
 
     useEffect(() => {
         setLanguage(translate?.bn)
@@ -121,6 +167,18 @@ export default function NavigationContainer({ children }: { children: React.Reac
                 setScreen('/home')
             }
         })
+        // *****************************************************
+        AsyncStorage.getItem('database').then(r => {
+            if (r) {
+                setDatabase(JSON.parse(r))
+            }
+            {
+                AsyncStorage.setItem('database', JSON.stringify(database))
+            }
+        })
+
+        // *****************************************************
+
         AsyncStorage.getItem('params').then(r => {
             if (r) {
                 setAllParams(JSON.parse(r))
@@ -133,16 +191,16 @@ export default function NavigationContainer({ children }: { children: React.Reac
         return () => { }
     }, [])
 
-    // useEffect(() => {
-    //     AsyncStorage.getItem('language').then(r => {
-    //         if (r == 'bn') {
-    //             setLanguage(translate?.bn)
-    //         }
-    //         else {
-    //             setLanguage(translate?.en)
-    //         }
-    //     })
-    // }, [screen])
+    useEffect(() => {
+        AsyncStorage.getItem('language').then(r => {
+            if (r == 'bn') {
+                setLanguage(translate?.bn)
+            }
+            else {
+                setLanguage(translate?.en)
+            }
+        })
+    }, [screen])
     const navigationConstructor: any = new navigation()
 
     return (
@@ -151,7 +209,8 @@ export default function NavigationContainer({ children }: { children: React.Reac
                 routine: routine,
                 navigation: navigationConstructor,
                 translate: language,
-                drawerRef: drawerRef
+                drawerRef: drawerRef,
+                database: getDatabase
             }}
         >
             {

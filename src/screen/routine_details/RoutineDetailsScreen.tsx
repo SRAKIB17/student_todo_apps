@@ -13,6 +13,7 @@ import Toast from '../../components/toast/Toast';
 import AddNewTimeSlot from './components/AddNewTimeSlot';
 import UpdateTimeSlot from './components/UpdateTimeSlot';
 
+
 export default function RoutineDetailsScreen(props: navigationInterface) {
     const { routine, navigation, translate } = props
     const { not_found } = translate
@@ -27,8 +28,8 @@ export default function RoutineDetailsScreen(props: navigationInterface) {
 
     const [newEntry, setNewEntry] = useState<boolean>(false)
     const [updateEntry, setUpdateEntry] = useState<{}>({})
-
     const [timeSlots, setTimeSlots] = useState<any[]>([])
+
     useEffect(() => {
         getAllTimeSlots()
     }, [newEntry, updateEntry])

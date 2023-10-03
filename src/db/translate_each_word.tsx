@@ -7,7 +7,7 @@ const translate_each_word = () => {
 
     const {
         home, profile, cart, wishlist, account_information, my_carts, my_orders, my_wishlists, notifications, shipping_address, support_tickets, settings
-        , notes, routine
+        , notes, routine, income_expenditure
 
     } = translate
 
@@ -102,9 +102,9 @@ const translate_each_word = () => {
             color: assets_images.calendar_color,
         },
         {
-            title: my_orders,
-            link: '/orders',
-            color: assets_images.notes_color,
+            title: income_expenditure,
+            link: '/income-expenditure',
+            color: assets_images.income_expenditure_3d,
         },
         {
             title: "Task Management",
