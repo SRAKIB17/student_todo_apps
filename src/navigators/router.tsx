@@ -1,16 +1,8 @@
-import { useContext } from "react";
-import CartScreen from "../screen/cart/CartScreen";
 import HomeScreen from "../screen/home/HomeScreen";
-import { NavigationProvider, navigationInterface } from "./NavigationContainer";
-import ProfileScreen from "../screen/profile/ProfileScreen";
-import { assets_images } from "../assets/assets_images";
+import { navigationInterface } from "./NavigationContainer";
 import NavbarTitleBackButton from "../components/shared/Navbar/NavbarTitleBackButton";
-import OrderScreen from "../screen/order/OrderScreen";
 import SettingsScreen from "../screen/settings/SettingsScreen";
-import { WishlistScreen } from "../screen/wishlist/WishlistScreen";
 import NotificationsScreen from "../screen/notifications/NotificationsScreen";
-import AccountInformation from "../screen/account_information/AccountInformation";
-import ShippingAddressScreen from "../screen/shipping_address/ShippingAddressScreen";
 import RoutineScreen from "../screen/routine/RoutineScreen";
 import RoutineDetailsScreen from "../screen/routine_details/RoutineDetailsScreen";
 import IncomeExpenditureScreen from "../screen/income_expenditure/IncomeExpenditureScreen";
@@ -18,28 +10,20 @@ import CurrentIncomeExpenditureScreen from "../screen/income_expenditure/Current
 import HistoryIncomeExpenditureScreen from "../screen/income_expenditure/HistoryIncomeExpenditureScreen";
 
 import transactionsDefaultDB from '../db/transactions.json'
+import SpecificMonthlyHistory from "../screen/income_expenditure/SpecificMonthlyHistory";
+import SpecificSelectYear from "../screen/income_expenditure/SpecificSelectYear";
+import DeveloperScreen from "../screen/developer/DeveloperScreen";
 
 export default function Router(props: navigationInterface) {
     const { translate, navigation: { pathname, params }, database } = props
     const months: any = translate;
-
-    console.log(params)
-
+    const month = months[transactionsDefaultDB?.months?.find(r => r.id == new Date().getMonth())?.month?.toLocaleLowerCase() || '']
     const {
-        my_carts,
-        my_profile,
-        my_wishlists,
         settings,
-        account_information,
-        my_orders,
-        shipping_address,
         notifications,
-
-
         notes,
         routine,
         income_expenditure,
-        current_income_expenditure,
         income_expenditure_history
     } = translate
     const week_day: any = translate
@@ -49,6 +33,11 @@ export default function Router(props: navigationInterface) {
             title: "Home",
             component: HomeScreen,
             link: "/home",
+        },
+        {
+            title: "Developer",
+            component: DeveloperScreen,
+            link: "/developer",
         },
 
         {
@@ -84,67 +73,6 @@ export default function Router(props: navigationInterface) {
             link: `/routine/${params?.routineID}`,
         },
 
-
-
-        // /profile
-        {
-            title: "Profile",
-            link: "/profile",
-            navbar: <NavbarTitleBackButton
-                title={my_profile}
-                key="profile_nav"
-                backward="/profile"
-            />,
-            component: ProfileScreen
-        },
-        // /account-information
-        {
-            title: "Account information",
-            link: "/account-information",
-            navbar: <NavbarTitleBackButton
-                title={account_information}
-                key="profile_information_nav"
-                backward="/profile"
-            />,
-            component: AccountInformation
-        },
-
-        // /wishlists
-        {
-            title: "Favorite",
-            link: "/wishlists",
-            navbar: <NavbarTitleBackButton
-                title={my_wishlists}
-                key="wishlist_nav"
-                backward="/profile"
-            />,
-            component: WishlistScreen,
-        },
-
-        // /wishlists
-        {
-            title: "Shipping Address",
-            link: "/shipping-address",
-            navbar: <NavbarTitleBackButton
-                title={shipping_address}
-                key="shipping_address_nav"
-                backward="/profile"
-            />,
-            component: ShippingAddressScreen,
-        },
-
-        // /carts
-        {
-            title: "Cart",
-            link: "/carts",
-            navbar: <NavbarTitleBackButton
-                title={my_carts}
-                key="my_carts_nav"
-                backward="/profile"
-            />,
-            component: CartScreen
-        },
-
         {
             title: "Income Expenditure",
             link: "/income-expenditure",
@@ -159,7 +87,7 @@ export default function Router(props: navigationInterface) {
             title: "Income Expenditure Current",
             link: "/income-expenditure/current",
             navbar: <NavbarTitleBackButton
-                title={`${current_income_expenditure} (${months[Object.values(transactionsDefaultDB?.months[`${new Date().getMonth()}`])?.[0]?.toLowerCase()]})`}
+                title={month}
                 key="income_expenditure_current_nav"
                 backward="/income-expenditure"
             />,
@@ -170,7 +98,6 @@ export default function Router(props: navigationInterface) {
             link: "/income-expenditure/history",
             navbar: <NavbarTitleBackButton
                 title={income_expenditure_history}
-                // title={`${income_expenditure_history}${params?.expensiveYear ? "(" + params?.expensiveYear + ")" : ""}`}
                 key="income_expenditure_history_nav"
                 backward="/income-expenditure"
             />,
@@ -178,13 +105,23 @@ export default function Router(props: navigationInterface) {
         },
         {
             title: "Income Expenditure History",
-            link: "/income-expenditure/history",
+            link: `/income-expenditure/history/${params?.expensiveYear}`,
             navbar: <NavbarTitleBackButton
-                title={income_expenditure_history}
+                title={`${income_expenditure_history}\n${params?.expensiveYear}`}
                 key="income_expenditure_history_nav"
-                backward="/income-expenditure"
+                backward="/income-expenditure/history"
             />,
-            component: HistoryIncomeExpenditureScreen
+            component: SpecificSelectYear
+        },
+        {
+            title: "Income Expenditure History",
+            link: `/income-expenditure/history/${params?.expensiveYear}/${params?.month}`,
+            navbar: <NavbarTitleBackButton
+                title={`${income_expenditure_history}\n${month} - ${params?.expensiveYear}`}
+                key="income_expenditure_history_nav"
+                backward={`/income-expenditure/history/${params?.expensiveYear}`}
+            />,
+            component: SpecificMonthlyHistory
         },
         // /notifications
         {

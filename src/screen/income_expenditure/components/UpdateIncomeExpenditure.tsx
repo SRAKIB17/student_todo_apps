@@ -112,7 +112,7 @@ function UpdateIncomeExpenditure({
             <View>
                 <TouchableOpacityButton
                     onPress={addTimeSlots}
-                    text='Add New'
+                    text='Update Now'
                     containerStyles={{ height: 40, backgroundColor: colors.primary, borderWidth: 0 }}
                     textStyle={{ color: colors.primary_text }}
                 />

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "routine",
+    "name": "TOOLS",
     "slug": "routine",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -22,7 +22,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.srakib17.routine"
+      "package": "com.srakib17.tools"
     },
     "web": {
       "favicon": "./assets/favicon.png"

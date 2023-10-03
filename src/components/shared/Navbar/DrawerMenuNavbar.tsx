@@ -7,6 +7,8 @@ import {
     View,
 } from 'react-native';
 import { NavigationProvider } from '../../../navigators/NavigationContainer';
+import AppsAllInfoDeveloper from './AppsAllInfoDeveloper';
+import { assets_images } from '../../../assets/assets_images';
 
 type SectionProps = PropsWithChildren<{
     // drawerRef: React.RefObject<DrawerLayoutAndroid>
@@ -14,15 +16,10 @@ type SectionProps = PropsWithChildren<{
 const DrawerMenuNavbar = ({ children }: SectionProps): JSX.Element => {
     const { drawerRef } = useContext(NavigationProvider)
     const drawer = useRef<DrawerLayoutAndroid>(null);
-    const navigationView = () => (
-        <View style={[styles.container, styles.navigationContainer]}>
-            <Text style={styles.paragraph}>I'm in the Drawer!</Text>
-            <Button
-                title="Close drawer"
-                onPress={() => drawer.current?.closeDrawer()}
-            />
-        </View>
-    );
+
+    const navigationView = () => {
+        return <AppsAllInfoDeveloper />
+    }
 
     return (
         <DrawerLayoutAndroid

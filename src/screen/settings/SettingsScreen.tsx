@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { Image, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 import { NavigationProvider } from '../../navigators/NavigationContainer';
-import translate_each_word from '../../db/translate_each_word';
 import { global_styles } from '../../styles/global';
 import { assets_images } from '../../assets/assets_images';
 import LanguageSettings from './components/LanguageSettings';
@@ -15,7 +14,6 @@ const user_info = {
 
 export default function SettingsScreen() {
     const { translate } = useContext(NavigationProvider)
-    const { my_account_menu } = translate_each_word()
     const { change_language } = translate
     const [isEnabled, setIsEnabled] = useState(false);
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);

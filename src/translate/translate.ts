@@ -52,6 +52,7 @@ export interface translateInterface {
     "savings": string,
     "current_income_expenditure": string,
     "income_expenditure_history": string,
+    "about_apps": string,
 
 
     "january": string,
@@ -123,6 +124,7 @@ export const translate = {
         "savings": "সঞ্চয়",
         "current_income_expenditure": "বর্তমান আয় ব্যয়",
         "income_expenditure_history": "আয় ব্যয়ের ইতিহাস",
+        "about_apps": "অ্যাপস সম্পর্কে",
 
         "january": "জানুয়ারী",
         "february": "ফেব্রুয়ারী",
@@ -194,6 +196,7 @@ export const translate = {
         "savings": "Savings",
         "current_income_expenditure": "Cur Income Expenditure",
         "income_expenditure_history": "Income Expenditure History",
+        "about_apps": "About",
 
         "january": "January",
         "february": "February",

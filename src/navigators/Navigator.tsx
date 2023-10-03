@@ -8,13 +8,12 @@ import MainNavbar from '../components/shared/Navbar/MainNavbar';
 
 
 const Navigator = () => {
-    const { navigation, translate, drawerRef, routine, database } = useContext(NavigationProvider)
+    const { navigation, translate, drawerRef, routine } = useContext(NavigationProvider)
     const rest = {
         navigation: navigation,
         translate,
         drawerRef,
-        routine,
-        database
+        routine
     }
     const router = Router(rest)
     const Render: any = router?.component || function () {

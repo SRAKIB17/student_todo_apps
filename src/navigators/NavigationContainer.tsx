@@ -39,16 +39,6 @@ db.exec([
     // console.log(result);
 });
 
-export interface databaseType {
-    transactions?: {
-        "type": 'expense' | 'income',
-        "datetime": string,
-        "title": string,
-        "amount": number,
-        "details": string,
-    }[]
-}
-
 export interface navigationInterface {
     navigation: {
         navigate: (value: string, paramsProps?: { key: string; value?: string | number | undefined; }[]) => void,
@@ -68,7 +58,6 @@ export interface navigationInterface {
             title: string
         }[]
     }[],
-    database: databaseType
 }
 
 export const NavigationProvider = createContext<navigationInterface>({
@@ -81,7 +70,6 @@ export const NavigationProvider = createContext<navigationInterface>({
     translate: translate?.en,
     drawerRef: { current: null },
     routine: default_routine,
-    database: database
 })
 
 const dataArray = [{ "routineID": 1 }, { "day": "Sunday" }];
@@ -98,7 +86,7 @@ export default function NavigationContainer({ children }: { children: React.Reac
     class navigation {
         navigate = async (value: string, paramsProps = [{ key: '', value: '' }]) => {
 
-            if (Boolean(paramsProps?.[0]?.key) && Boolean(paramsProps?.[0]?.value)) {
+            if (Boolean(paramsProps?.[0]?.key) && (Boolean(paramsProps?.[0]?.value) || paramsProps?.[0]?.value == '0')) {
 
                 const paramsObj: Array<{ [key: string]: any }> = paramsProps?.map(r => {
                     return {
@@ -154,7 +142,6 @@ export default function NavigationContainer({ children }: { children: React.Reac
     const [language, setLanguage] = useState<translateInterface>(translate?.bn)
 
 
-    const [getDatabase, setDatabase] = useState<databaseType>(database)
 
     useEffect(() => {
         setLanguage(translate?.bn)
@@ -167,16 +154,6 @@ export default function NavigationContainer({ children }: { children: React.Reac
                 setScreen('/home')
             }
         })
-        // *****************************************************
-        AsyncStorage.getItem('database').then(r => {
-            if (r) {
-                setDatabase(JSON.parse(r))
-            }
-            {
-                AsyncStorage.setItem('database', JSON.stringify(database))
-            }
-        })
-
         // *****************************************************
 
         AsyncStorage.getItem('params').then(r => {
@@ -210,7 +187,6 @@ export default function NavigationContainer({ children }: { children: React.Reac
                 navigation: navigationConstructor,
                 translate: language,
                 drawerRef: drawerRef,
-                database: getDatabase
             }}
         >
             {

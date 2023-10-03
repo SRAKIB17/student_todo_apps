@@ -1,13 +1,10 @@
 import React, { useRef, useState } from 'react';
 import { Image, SafeAreaView, StyleSheet, View, Text, Button, TouchableHighlight, DrawerLayoutAndroid } from 'react-native';
 import Colors from '../../../utils/colors';
-import images_database from '../../../db/translate_each_word';
 import { assets_images } from '../../../assets/assets_images';
 
 
 const MainNavbar = ({ drawerRef }: { drawerRef: React.RefObject<DrawerLayoutAndroid> }) => {
-
-
     const onPress = () => {
         return drawerRef.current?.openDrawer()
     }
@@ -27,7 +24,7 @@ const MainNavbar = ({ drawerRef }: { drawerRef: React.RefObject<DrawerLayoutAndr
 
                 <View>
                     <Text style={{ fontSize: 24, fontWeight: '600', color: Colors.primary_text }}>
-                        Ahaliyas
+                        Tools
                     </Text>
                 </View>
 

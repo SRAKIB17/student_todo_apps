@@ -2,7 +2,6 @@ import React, { useContext, useRef, useEffect } from 'react';
 import { Animated, FlatList, Image, Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { assets_images } from '../../assets/assets_images';
 import { global_styles } from '../../styles/global';
-import translate_each_word from '../../db/translate_each_word';
 import { NavigationProvider, db, navigationInterface } from '../../navigators/NavigationContainer';
 import colors from '../../utils/colors';
 

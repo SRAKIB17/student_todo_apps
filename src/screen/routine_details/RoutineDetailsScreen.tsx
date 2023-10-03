@@ -2,7 +2,6 @@ import React, { useContext, useRef, useEffect, useState } from 'react';
 import { Animated, FlatList, Image, Pressable, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { assets_images } from '../../assets/assets_images';
 import { global_styles } from '../../styles/global';
-import translate_each_word from '../../db/translate_each_word';
 import { NavigationProvider, db, navigationInterface } from '../../navigators/NavigationContainer';
 import colors from '../../utils/colors';
 import PressableButton from '../../components/button/PressableButton';
@@ -129,7 +128,6 @@ export default function RoutineDetailsScreen(props: navigationInterface) {
                                                                         (tx) => {
                                                                             tx.executeSql(deleteRoute, [], (err, result) => {
                                                                                 if (!Boolean(result?.rowsAffected)) {
-                                                                                    console.log(err)
                                                                                     Toast({ text: "Something is wrong" })
                                                                                 } else {
                                                                                     getAllTimeSlots()

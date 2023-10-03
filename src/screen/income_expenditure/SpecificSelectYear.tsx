@@ -9,9 +9,8 @@ import transactionsDefaultDB from '../../db/transactions.json'
 import AsyncStorage, { useAsyncStorage } from '@react-native-async-storage/async-storage';
 
 
-export default function HistoryIncomeExpenditureScreen(props: navigationInterface) {
+export default function SpecificSelectYear(props: navigationInterface) {
     const { routine, navigation, translate } = props
-    const { current_income_expenditure, income_expenditure_history } = translate
 
     const [transactionsDB, setTransactionsDB] = useState<transactionsDBType[]>(transactionsDefaultDB.transactions)
 
@@ -25,92 +24,33 @@ export default function HistoryIncomeExpenditureScreen(props: navigationInterfac
             }
         })
     }, [])
-
-    const distinct_year = [...new Set(transactionsDB?.map(r => {
-        return new Date(r?.datetime).getFullYear()
-    }))]
-
-    const [selectYear, setSelectYear] = useState<number>()
     const months: any = translate;
+
+    const year = parseInt(navigation?.params?.expensiveYear)
+    const get_months = [...new Set(transactionsDB.filter(r => new Date(r?.datetime).getFullYear() == year)?.map(r => new Date(r?.datetime).getMonth()))]?.sort(function (a, b) { return a - b }).map(r => {
+        return transactionsDefaultDB?.months.find(id => id?.id == r)
+    })
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
             {
-                Boolean(selectYear) ||
+                Boolean(year) &&
                 <View style={global_styles.container}>
                     {
-                        distinct_year?.map((r: any, index) => {
-                            // const check = pathname === r.link;
-                            return (
-                                <View key={index}>
-                                    <Pressable onPress={() => {
-                                        navigation.navigate(`/income-expenditure/history/${r}`, [{ key: 'expensiveYear', value: r }])
-                                        setSelectYear(r)
-                                    }}>
-                                        <View style={styles.button}>
-                                            <View style={styles.button_title_image}>
-                                                <View>
-                                                    <View style={{ justifyContent: 'center', alignContent: 'center' }}>
-                                                        <ImageBackground
-                                                            source={assets_images.blank_date_3d}
-                                                            style={{ width: 48, height: 54 }}
-                                                        >
-                                                            <Text style={[global_styles.text_sm, global_styles.font_medium, {
-                                                                textAlign: 'center',
-                                                                paddingTop: 10,
-                                                                color: colors.white
-                                                            }]}>
-                                                                {r}
-                                                            </Text>
-                                                        </ImageBackground>
-                                                    </View>
-
-                                                </View>
-                                                <View>
-                                                    <Text style={[global_styles.text_lg, global_styles.font_medium, { textTransform: "capitalize" }]}>
-                                                        {
-                                                            r
-                                                        }
-                                                    </Text>
-                                                </View>
-                                            </View>
-
-                                            <View>
-                                                <Image
-                                                    source={assets_images.arrow_right_grey}
-                                                    style={{
-                                                        height: 16, objectFit: 'contain',
-                                                    }}
-                                                />
-                                            </View>
-
-                                        </View>
-                                    </Pressable>
-                                </View>
-                            )
-                        })
-                    }
-                </View>
-            }
-
-            {
-                Boolean(selectYear) &&
-                <View style={global_styles.container}>
-                    {
-                        transactionsDefaultDB.months?.map((r: any, index) => {
+                        get_months?.map((r: any, index) => {
                             // const check = pathname === r.link;
                             // console.log(r)
                             return (
                                 <View key={index}>
                                     <Pressable onPress={() => {
-                                        navigation.navigate(`/income-expenditure/history/${selectYear}/${r?.id}`, [
+                                        navigation.navigate(`/income-expenditure/history/${navigation?.params?.expensiveYear}/${r?.id}`, [
                                             {
                                                 key: 'month',
                                                 value: r?.id
                                             },
                                             {
                                                 "key": "expensiveYear",
-                                                value: selectYear
+                                                value: navigation?.params?.expensiveYear
                                             }
                                         ])
                                     }}>

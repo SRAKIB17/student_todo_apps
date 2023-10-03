@@ -9,6 +9,7 @@ import AddNewIncomeExpenditure from './components/AddNewIncomeExpenditure';
 import transactionsDefaultDB from '../../db/transactions.json';
 import UpdateIncomeExpenditure from './components/UpdateIncomeExpenditure';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import decimalPoint from '../../hooks/decimalPoint';
 
 export interface transactionsDBType {
     "type"?: string | 'expense' | 'income',
@@ -33,8 +34,8 @@ export default function CurrentIncomeExpenditureScreen(props: navigationInterfac
             if (r) {
                 setTransactionsDB(JSON.parse(r))
             }
-            {
-                AsyncStorage.setItem('database', JSON.stringify(transactionsDefaultDB.transactions))
+            else {
+                AsyncStorage.setItem('transactions', JSON.stringify(transactionsDefaultDB.transactions))
             }
         })
     }
@@ -45,8 +46,11 @@ export default function CurrentIncomeExpenditureScreen(props: navigationInterfac
 
 
     const currentMonth = new Date().getMonth()
+    const currentYear = new Date().getFullYear()
 
-    const filter = transactionsDB?.filter(r => new Date(r?.datetime)?.getMonth() == currentMonth)?.sort(function (a, b) {
+    const filter = transactionsDB?.filter(r => {
+        return new Date(r?.datetime)?.getMonth() == currentMonth && currentYear == new Date(r?.datetime)?.getFullYear()
+    })?.sort(function (a, b) {
         const a_date = new Date(a?.datetime).getDate()
         const b_date = new Date(b?.datetime).getDate()
         return b_date - a_date
@@ -55,8 +59,9 @@ export default function CurrentIncomeExpenditureScreen(props: navigationInterfac
     function total(total: number, num: number) {
         return Number(total) + Number(num);
     }
-    const total_expense: any = filter?.filter(r => r.type == 'expense')?.map(r => r.amount)?.reduce(total, 0)
-    const total_income: any = filter?.filter(r => r.type == 'income')?.map(r => r.amount)?.reduce(total, 0)
+
+    const total_expense: any = decimalPoint(filter?.filter(r => r.type == 'expense')?.map(r => r.amount)?.reduce(total, 0))
+    const total_income: any = decimalPoint(filter?.filter(r => r.type == 'income')?.map(r => r.amount)?.reduce(total, 0))
 
 
     return (

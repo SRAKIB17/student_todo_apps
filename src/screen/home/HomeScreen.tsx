@@ -1,20 +1,38 @@
 import React, { useContext, useRef, useEffect } from 'react';
-import { Animated, FlatList, Image, Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import Banner from './components/banner/Banner';
-import { categories } from './components/Categories';
-import CategorySection from './components/CategorySection';
-import TextInputExample from '../../components/input/InputSearch';
-import ProfileScreen from '../profile/ProfileScreen';
-import { NavigationProvider, navigationInterface } from '../../navigators/NavigationContainer';
+import { Image, Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { navigationInterface } from '../../navigators/NavigationContainer';
 import colors from '../../utils/colors';
 import { assets_images } from '../../assets/assets_images';
 import { global_styles } from '../../styles/global';
-import translate_each_word from '../../db/translate_each_word';
 
 
 export default function HomeScreen(props: navigationInterface) {
-    const { routine, navigation } = props
-    const { home_menu } = translate_each_word()
+    const { navigation, translate } = props
+    const { notes, income_expenditure, routine } = translate
+
+    const home_menu = [
+        {
+            title: notes,
+            link: '/notes',
+            color: assets_images.notes_color,
+        },
+        {
+            title: routine,
+            link: '/routine',
+            color: assets_images.calendar_color,
+        },
+        {
+            title: income_expenditure,
+            link: '/income-expenditure',
+            color: assets_images.income_expenditure_3d,
+        },
+        {
+            title: "Task Management",
+            link: '/wishlists',
+            color: assets_images.notes_color,
+        },
+    ]
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={global_styles.container}>

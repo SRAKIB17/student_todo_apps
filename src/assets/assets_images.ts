@@ -38,4 +38,11 @@ export const assets_images = {
     "income_3d": require('./images/routine/income_3d.png'),
     "expenditure_3d": require('./images/routine/expenditure_3d.png'),
     "blank_date_3d": require('./images/routine/blank_date_3d.png'),
+    "developer_srakib17": require('./images/routine/developer_srakib17.jpg'),
+    "settings3d": require('./images/routine/settings3d.png'),
+    "developer3d": require('./images/routine/developer3d.png'),
+    "email3d": require('./images/routine/email3d.png'),
+    "phone3d": require('./images/routine/phone3d.png'),
+    "facebook3d": require('./images/routine/facebook3d.png'),
+    "github3d": require('./images/routine/github3d.png'),
 }

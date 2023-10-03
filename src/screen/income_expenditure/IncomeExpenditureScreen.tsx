@@ -4,7 +4,6 @@ import { NavigationProvider, navigationInterface } from '../../navigators/Naviga
 import colors from '../../utils/colors';
 import { assets_images } from '../../assets/assets_images';
 import { global_styles } from '../../styles/global';
-import translate_each_word from '../../db/translate_each_word';
 
 
 export default function IncomeExpenditureScreen(props: navigationInterface) {

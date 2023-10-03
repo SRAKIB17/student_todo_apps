@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Image, Switch, Text, View } from 'react-native';
 import { NavigationProvider } from '../../../navigators/NavigationContainer';
-import translate_each_word from '../../../db/translate_each_word';
 import { assets_images } from '../../../assets/assets_images';
 import { global_styles } from '../../../styles/global';
 import AsyncStorage from '@react-native-async-storage/async-storage';
