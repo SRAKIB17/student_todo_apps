@@ -75,7 +75,7 @@ function AddNewTimeSlot({
                         From
                     </Text>
                     <TextInput
-                        onChangeText={(text) => setToTime(text)}
+                        onChangeText={(text) => setFromTime(text)}
                         placeholder="11:00 am"
                         style={styles.input}
                     />
@@ -85,7 +85,7 @@ function AddNewTimeSlot({
                         To
                     </Text>
                     <TextInput
-                        onChangeText={(text) => setFromTime(text)}
+                        onChangeText={(text) => setToTime(text)}
                         placeholder="11:30 am"
                         style={styles.input}
 

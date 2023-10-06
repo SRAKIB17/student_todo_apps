@@ -90,7 +90,7 @@ function UpdateTimeSlot({
                         From
                     </Text>
                     <TextInput
-                        onChangeText={(text) => setToTime(text)}
+                        onChangeText={(text) => setFromTime(text)}
                         placeholder="From time slot"
                         style={styles.input}
                         defaultValue={updateEntry?.from}
@@ -101,7 +101,7 @@ function UpdateTimeSlot({
                         To
                     </Text>
                     <TextInput
-                        onChangeText={(text) => setFromTime(text)}
+                        onChangeText={(text) => setToTime(text)}
                         placeholder="To time slot"
                         style={styles.input}
                         defaultValue={updateEntry?.to}
