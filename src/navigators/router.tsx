@@ -15,7 +15,7 @@ import SpecificSelectYear from "../screen/income_expenditure/SpecificSelectYear"
 import DeveloperScreen from "../screen/developer/DeveloperScreen";
 
 export default function Router(props: navigationInterface) {
-    const { translate, navigation: { pathname, params }, database } = props
+    const { translate, navigation: { pathname, params } } = props
     const months: any = translate;
     const month = months[transactionsDefaultDB?.months?.find(r => r.id == new Date().getMonth())?.month?.toLocaleLowerCase() || '']
     const {

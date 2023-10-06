@@ -4,14 +4,26 @@ import { StyleSheet, Text, TextInput, View } from 'react-native';
 import TouchableOpacityButton from '../../../components/button/TouchableOpacityButton';
 import { global_styles } from '../../../styles/global';
 import genQueryInsertSql from '../../../mysql_gen/genQueryInsertSql';
-import { db } from '../../../navigators/NavigationContainer';
 import Toast from '../../../components/toast/Toast';
 import genQueryUpdateSql from '../../../mysql_gen/genQueryUpdateSql';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-function UpdateTimeSlot({ navigation, setUpdateEntry, getAllTimeSlots, updateEntry }: { setUpdateEntry: any, navigation: any, getAllTimeSlots: any, updateEntry: any }) {
-    const [fromTime, setFromTime] = useState(updateEntry?.fromTime)
+function UpdateTimeSlot({
+    navigation,
+    getAllTimeSlots,
+    setUpdateEntry,
+    updateEntry,
+    routine
+}: {
+    getAllTimeSlots: any,
+    setUpdateEntry: any,
+    navigation: any,
+    updateEntry: any,
+    routine: any
+}) {
+    const [fromTime, setFromTime] = useState(updateEntry?.from)
     const [details, setDetails] = useState(updateEntry?.details)
-    const [toTime, setToTime] = useState(updateEntry?.toTime)
+    const [toTime, setToTime] = useState(updateEntry?.to)
     const [title, setTitle] = useState(updateEntry?.title)
 
     const [error, setError] = useState('')
@@ -22,29 +34,20 @@ function UpdateTimeSlot({ navigation, setUpdateEntry, getAllTimeSlots, updateEnt
             setError("Please fill all box")
         }
         else {
-
-            const insertSql = genQueryUpdateSql({
-                table: 'routine_time_slots',
-                update_data: {
-                    fromTime: fromTime,
-                    toTime: toTime,
-                    dayID: navigation?.params?.routineID,
-                    details: details,
-                    title: title
-                },
-                condition: `id = ${updateEntry?.id} AND dayID = ${updateEntry?.dayID}`
+            const update = {
+                routineID: updateEntry?.routineID,
+                id: updateEntry?.id,
+                from: fromTime,
+                to: toTime,
+                details: details,
+                title: title
+            }
+            const filter = routine?.time_slots?.filter((r: any) => {
+                return r?.id != updateEntry?.id
             })
-            db.transaction(
-                (tx) => {
-                    tx.executeSql(insertSql, [], (err, result) => {
-                        if (!Boolean(result?.rowsAffected)) {
-                            Toast({ text: "Something is wrong" })
-                        } else {
-                            getAllTimeSlots()
-                        }
-                    });
-                },
-            );
+            routine.time_slots = [...filter, update]
+            AsyncStorage.setItem('routine', JSON.stringify(routine))
+            getAllTimeSlots()
             setUpdateEntry({});
         }
     }
@@ -90,7 +93,7 @@ function UpdateTimeSlot({ navigation, setUpdateEntry, getAllTimeSlots, updateEnt
                         onChangeText={(text) => setToTime(text)}
                         placeholder="From time slot"
                         style={styles.input}
-                        defaultValue={updateEntry?.fromTime}
+                        defaultValue={updateEntry?.from}
                     />
                 </View>
                 <View>
@@ -101,7 +104,7 @@ function UpdateTimeSlot({ navigation, setUpdateEntry, getAllTimeSlots, updateEnt
                         onChangeText={(text) => setFromTime(text)}
                         placeholder="To time slot"
                         style={styles.input}
-                        defaultValue={updateEntry?.toTime}
+                        defaultValue={updateEntry?.to}
                     />
                 </View>
             </View>

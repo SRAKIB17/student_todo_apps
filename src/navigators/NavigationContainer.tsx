@@ -2,42 +2,19 @@ import React, { PropsWithChildren, createContext, useEffect, useRef, useState } 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { translate, translateInterface } from '../translate/translate';
 import { DrawerLayoutAndroid } from 'react-native';
-import default_routine from '../db/default_routine.json'
-import database from '../db/database.json'
+import routine from '../db/routine.json';
 
-import * as SQLite from 'expo-sqlite';
-export const db = SQLite.openDatabase('student_tools');
-
-const routine_time_slots = `
-CREATE TABLE IF NOT EXISTS routine_time_slots (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    fromTime VARCHAR(255) NOT NULL,
-    toTime VARCHAR(255) NOT NULL NOT NULL,
-    dayID INTEGER NOT NULL,
-    details TEXT,
-    title TEXT
-);
-`
-const income_expenditure = `
-CREATE TABLE IF NOT EXISTS income_expenditure (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    type VARCHAR(255) NOT NULL,
-    amount INT NOT NULL,
-    createdAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    details TEXT,
-    monthID REAL NOT NULL,
-    title TEXT
-);
-`
-const x = `INSERT INTO routine_time_slots (from_time, to_time, details, title,dayID) VALUES('12:00 am', '1:00 am', 'Midnight', 'Sleep',2)`
-
-db.exec([
-    { sql: routine_time_slots, args: [] },
-    { sql: income_expenditure, args: [] },
-], false, (err, result) => {
-    console.log(result)
-    // console.log(result);
-});
+export interface RoutineDatabaseInterface {
+    day?: {}[],
+    time_slots?: {
+        routineID?: number,
+        id?: number,
+        from?: string,
+        to?: string,
+        details?: string,
+        title?: string
+    }[]
+}
 
 export interface navigationInterface {
     navigation: {
@@ -48,16 +25,7 @@ export interface navigationInterface {
     },
     translate: translateInterface,
     drawerRef: React.RefObject<DrawerLayoutAndroid>,
-    routine: {
-        id: number,
-        day: string,
-        time_slots: {
-            from: string,
-            to: string,
-            details: string,
-            title: string
-        }[]
-    }[],
+    routine: RoutineDatabaseInterface
 }
 
 export const NavigationProvider = createContext<navigationInterface>({
@@ -69,7 +37,7 @@ export const NavigationProvider = createContext<navigationInterface>({
     },
     translate: translate?.en,
     drawerRef: { current: null },
-    routine: default_routine,
+    routine: routine
 })
 
 const dataArray = [{ "routineID": 1 }, { "day": "Sunday" }];
@@ -80,7 +48,7 @@ export default function NavigationContainer({ children }: { children: React.Reac
 
     const [screen, setScreen] = useState('/home');
     const [params, setAllParams] = useState<{}>({});
-    const [routine, setRoutine] = useState<{}[]>([{}]);
+    const [routineSet, setRoutine] = useState<RoutineDatabaseInterface>();
     const drawerRef = useRef<DrawerLayoutAndroid>(null);
 
     class navigation {
@@ -145,7 +113,6 @@ export default function NavigationContainer({ children }: { children: React.Reac
 
     useEffect(() => {
         setLanguage(translate?.bn)
-        setRoutine(default_routine)
         AsyncStorage.getItem('link').then(r => {
             if (r) {
                 setScreen(r)
@@ -168,6 +135,7 @@ export default function NavigationContainer({ children }: { children: React.Reac
         return () => { }
     }, [])
 
+
     useEffect(() => {
         AsyncStorage.getItem('language').then(r => {
             if (r == 'bn') {
@@ -177,13 +145,23 @@ export default function NavigationContainer({ children }: { children: React.Reac
                 setLanguage(translate?.en)
             }
         })
+        AsyncStorage.getItem('routine').then((r: any) => {
+            if (r) {
+                setRoutine(JSON.parse(r))
+            }
+            else {
+                AsyncStorage.setItem('routine', JSON.stringify(routine))
+                setRoutine(routine)
+            }
+        })
     }, [screen])
+
     const navigationConstructor: any = new navigation()
 
     return (
         <NavigationProvider.Provider
             value={{
-                routine: routine,
+                routine: routineSet,
                 navigation: navigationConstructor,
                 translate: language,
                 drawerRef: drawerRef,

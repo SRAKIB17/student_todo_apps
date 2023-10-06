@@ -1,9 +1,10 @@
-import React, { useContext, useRef, useEffect } from 'react';
+import React from 'react';
 import { Animated, FlatList, Image, Pressable, SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { assets_images } from '../../assets/assets_images';
 import { global_styles } from '../../styles/global';
-import { NavigationProvider, db, navigationInterface } from '../../navigators/NavigationContainer';
+import { navigationInterface } from '../../navigators/NavigationContainer';
 import colors from '../../utils/colors';
+
 
 export default function RoutineScreen(props: navigationInterface) {
     const { routine, navigation, translate }: any = props
@@ -12,11 +13,11 @@ export default function RoutineScreen(props: navigationInterface) {
         <SafeAreaView style={{ flex: 1 }}>
             <View style={global_styles.container}>
                 {
-                    routine?.map((r: any, index: number) => {
+                    routine?.day?.map((r: any, index: number) => {
                         return (
                             <View key={index}>
-                                <Pressable onPress={() => navigation.navigate(`/routine/${r?.id}`, [
-                                    { key: 'routineID', value: r?.id },
+                                <Pressable onPress={() => navigation.navigate(`/routine/${r?.routineID}`, [
+                                    { key: 'routineID', value: r?.routineID },
                                     { key: 'day', value: r?.day },
                                 ])}   >
                                     <View style={styles.button}>

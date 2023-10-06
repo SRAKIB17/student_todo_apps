@@ -1,0 +1,74 @@
+{
+    "day": [
+        {
+            "routineID": 1,
+            "day": "Sunday"
+        },
+        {
+            "routineID": 2,
+            "day": "Monday"
+        },
+        {
+            "routineID": 3,
+            "day": "Tuesday"
+        },
+        {
+            "routineID": 4,
+            "day": "Wednesday"
+        },
+        {
+            "routineID": 5,
+            "day": "Thursday"
+        },
+        {
+            "routineID": 6,
+            "day": "Friday"
+        },
+        {
+            "routineID": 7,
+            "day": "Saturday"
+        }
+    ],
+    "time_slots": [
+        {
+            "id": 1,
+            "routineID": 1,
+            "from": "10.30 am",
+            "to": "11:30 am",
+            "details": "How to details",
+            "title": "Sleep"
+        },
+        {
+            "id": 2,
+            "from": "1:00 am",
+            "routineID": 1,
+            "to": "6:00 am",
+            "details": "Early Morning",
+            "title": "Sleep"
+        },
+        {
+            "id": 3,
+            "from": "6:00 am",
+            "routineID": 1,
+            "to": "12:00 pm",
+            "details": "Sleep",
+            "title": "Sleep"
+        },
+        {
+            "id": 4,
+            "from": "12:00 pm",
+            "routineID": 1,
+            "to": "6:00 pm",
+            "details": "Afternoon",
+            "title": "Sleep"
+        },
+        {
+            "id": 5,
+            "from": "6:00 pm",
+            "routineID": 1,
+            "to": "12:00 am",
+            "details": "Evening/Night",
+            "title": "Sleep"
+        }
+    ]
+}

@@ -2,32 +2,43 @@ import React, { useContext, useRef, useEffect, useState } from 'react';
 import { Animated, FlatList, Image, Pressable, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { assets_images } from '../../assets/assets_images';
 import { global_styles } from '../../styles/global';
-import { NavigationProvider, db, navigationInterface } from '../../navigators/NavigationContainer';
+import { navigationInterface } from '../../navigators/NavigationContainer';
 import colors from '../../utils/colors';
 import PressableButton from '../../components/button/PressableButton';
-import genQueryInsertSql from '../../mysql_gen/genQueryInsertSql';
-import TouchableOpacityButton from '../../components/button/TouchableOpacityButton';
-import genQueryDeleteSql from '../../mysql_gen/genQueryDeleteSql';
-import Toast from '../../components/toast/Toast';
 import AddNewTimeSlot from './components/AddNewTimeSlot';
 import UpdateTimeSlot from './components/UpdateTimeSlot';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+interface RoutineDatabaseInterface {
+    day?: {}[],
+    time_slots?: {
+        routineID?: number,
+        id?: number,
+        from?: string,
+        to?: string,
+        details?: string,
+        title?: string
+    }[]
+}
 
 export default function RoutineDetailsScreen(props: navigationInterface) {
-    const { routine, navigation, translate } = props
+    const { navigation, translate } = props
+
     const { not_found } = translate
+    const [routine, setRoutine] = useState<RoutineDatabaseInterface>({});
+
     const getAllTimeSlots = () => {
-        db.transaction((tx) => {
-            tx.executeSql(`SELECT * FROM routine_time_slots WHERE dayID=?;`, [navigation?.params?.routineID], (err, result) => {
-                const rows = result?.rows;
-                setTimeSlots(rows?._array)
-            });
-        });
+        AsyncStorage.getItem('routine').then((r: any) => {
+            setRoutine(JSON.parse(r))
+        })
     }
+
+    const timeSlots = routine?.time_slots?.filter((r, index) => {
+        return r.routineID == navigation?.params?.routineID
+    })
 
     const [newEntry, setNewEntry] = useState<boolean>(false)
     const [updateEntry, setUpdateEntry] = useState<{}>({})
-    const [timeSlots, setTimeSlots] = useState<any[]>([])
 
     useEffect(() => {
         getAllTimeSlots()
@@ -55,6 +66,7 @@ export default function RoutineDetailsScreen(props: navigationInterface) {
             </View>
             {
                 newEntry && <AddNewTimeSlot
+                    routine={routine}
                     getAllTimeSlots={getAllTimeSlots}
                     navigation={navigation}
                     setNewEntry={setNewEntry}
@@ -62,6 +74,7 @@ export default function RoutineDetailsScreen(props: navigationInterface) {
             }
             {
                 Boolean(Object.values(updateEntry)?.length) && <UpdateTimeSlot
+                    routine={routine}
                     getAllTimeSlots={getAllTimeSlots}
                     updateEntry={updateEntry}
                     navigation={navigation}
@@ -106,7 +119,7 @@ export default function RoutineDetailsScreen(props: navigationInterface) {
 
                                                         <Text style={[global_styles.text_base, global_styles.font_medium]}>
                                                             {
-                                                                `${r?.fromTime} to ${r?.toTime}`
+                                                                `${r?.from} to ${r?.to}`
                                                             }
                                                         </Text>
 
@@ -120,21 +133,14 @@ export default function RoutineDetailsScreen(props: navigationInterface) {
                                                             />
                                                             <PressableButton
                                                                 onPress={() => {
-                                                                    const deleteRoute = genQueryDeleteSql({
-                                                                        table: 'routine_time_slots',
-                                                                        condition: `id = ${r?.id} AND ${r?.dayID}`
+                                                                    const filter = routine?.time_slots?.filter((delete_id: any) => {
+                                                                        return r?.id != delete_id?.id
                                                                     })
-                                                                    db.transaction(
-                                                                        (tx) => {
-                                                                            tx.executeSql(deleteRoute, [], (err, result) => {
-                                                                                if (!Boolean(result?.rowsAffected)) {
-                                                                                    Toast({ text: "Something is wrong" })
-                                                                                } else {
-                                                                                    getAllTimeSlots()
-                                                                                }
-                                                                            });
-                                                                        }
-                                                                    );
+                                                                    routine.time_slots = filter
+                                                                    AsyncStorage.setItem('routine', JSON.stringify(routine)).then(() => {
+                                                                        getAllTimeSlots()
+                                                                    })
+
                                                                 }}
                                                                 containerStyles={{ width: 40, backgroundColor: 'transparent' }}
                                                                 image={assets_images.delete_3d}

@@ -3,59 +3,48 @@ import colors from '../../../utils/colors';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import TouchableOpacityButton from '../../../components/button/TouchableOpacityButton';
 import { global_styles } from '../../../styles/global';
-import genQueryInsertSql from '../../../mysql_gen/genQueryInsertSql';
-import { db } from '../../../navigators/NavigationContainer';
 import Toast from '../../../components/toast/Toast';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-function AddNewTimeSlot({ navigation, setNewEntry, getAllTimeSlots }: { setNewEntry: any, navigation: any, getAllTimeSlots: any }) {
+function AddNewTimeSlot({
+    navigation,
+    routine,
+    setNewEntry, getAllTimeSlots
+}: {
+    setNewEntry: any,
+    routine?: any,
+    navigation: any,
+    getAllTimeSlots: any
+}) {
     const [fromTime, setFromTime] = useState('')
     const [details, setDetails] = useState('')
     const [toTime, setToTime] = useState('')
     const [title, setTitle] = useState('')
 
-    const [error, setError] = useState('')
-
-
-    const addTimeSlots = async () => {
-        setError('')
+    const addTimeSlots = () => {
         if (!Boolean(fromTime) || !Boolean(details) || !Boolean(toTime) || !Boolean(title)) {
-            setError("Please fill all box")
+            Toast({ text: "Please fill all box" })
         }
         else {
+            const insert = {
+                from: fromTime,
+                to: toTime,
+                id: parseInt(routine?.time_slots?.length) + 1,
+                routineID: navigation?.params?.routineID,
+                details: details,
+                title: title
+            }
 
-            const insertSql = genQueryInsertSql({
-                table: 'routine_time_slots',
-                insert_data: {
-                    fromTime: fromTime,
-                    toTime: toTime,
-                    dayID: navigation?.params?.routineID,
-                    details: details,
-                    title: title
-                }
+            routine.time_slots = [...routine.time_slots, insert]
+            AsyncStorage.setItem('routine', JSON.stringify(routine)).then(r => {
+                setNewEntry(false);
+                getAllTimeSlots()
             })
-            db.transaction(
-                (tx) => {
-                    tx.executeSql(insertSql, [], (err, result) => {
-                        if (!Boolean(result?.rowsAffected)) {
-                            Toast({ text: "Something is wrong" })
-                        } else {
-                            getAllTimeSlots()
-                        }
-                    });
-                },
-            );
-            setNewEntry(false);
         }
     }
     return (
         <View style={{ display: "flex", gap: 16 }}>
 
-            {
-                Boolean(error) &&
-                <Text style={[global_styles.text_sm, global_styles.font_medium, { color: colors.danger }]}>
-                    {error}
-                </Text>
-            }
             <View>
                 <Text style={[global_styles.text_base, global_styles.font_medium, { paddingBottom: 4 }]}>
                     Title
